@@ -81,6 +81,56 @@
       "name": "/actions/mixedreality/in/ExternalCamera",
       "type": "pose",
       "requirement": "optional"
+    },
+    {
+      "name": "/actions/hapticglove/in/Trigger",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/hapticglove/in/Teleport",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/hapticglove/in/Pose",
+      "type": "pose"
+    },
+    {
+      "name": "/actions/hapticglove/in/SkeletonLeft",
+      "type": "skeleton",
+      "skeleton": "/skeleton/hand/left"
+    },
+    {
+      "name": "/actions/hapticglove/in/SkeleteonRight",
+      "type": "skeleton",
+      "skeleton": "/skeleton/hand/right"
+    },
+    {
+      "name": "/actions/hapticglove/in/Grip",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/hapticglove/out/Haptic",
+      "type": "vibration"
+    },
+    {
+      "name": "/actions/hapticglove/out/Haptic_Thumb",
+      "type": "vibration"
+    },
+    {
+      "name": "/actions/hapticglove/out/Haptic_Index",
+      "type": "vibration"
+    },
+    {
+      "name": "/actions/hapticglove/out/Haptic_Middle",
+      "type": "vibration"
+    },
+    {
+      "name": "/actions/hapticglove/out/Haptic_Ring",
+      "type": "vibration"
+    },
+    {
+      "name": "/actions/hapticglove/out/Haptic_Pinky",
+      "type": "vibration"
     }
   ],
   "action_sets": [
@@ -98,6 +148,10 @@
     },
     {
       "name": "/actions/mixedreality",
+      "usage": "single"
+    },
+    {
+      "name": "/actions/hapticglove",
       "usage": "single"
     }
   ],
@@ -169,7 +223,19 @@
       "/actions/default/out/Haptic": "Haptic",
       "/actions/platformer/in/Jump": "Jump",
       "/actions/default/in/SnapTurnLeft": "Snap Turn (Left)",
-      "/actions/default/in/SnapTurnRight": "Snap Turn (Right)"
+      "/actions/default/in/SnapTurnRight": "Snap Turn (Right)",
+      "/actions/hapticglove/in/Trigger": "Trigger",
+      "/actions/hapticglove/in/Teleport": "Teleport",
+      "/actions/hapticglove/in/Pose": "PoseHap",
+      "/actions/hapticglove/in/SkeletonLeft": "Skeleton (Left)",
+      "/actions/hapticglove/in/SkeleteonRight": "Skeleton (Right)",
+      "/actions/hapticglove/out/Haptic": "Haptic",
+      "/actions/hapticglove/out/Haptic_Thumb": "Haptic (Thumb)",
+      "/actions/hapticglove/out/Haptic_Index": "Haptic (Index)",
+      "/actions/hapticglove/out/Haptic_Middle": "Haptic (Middle)",
+      "/actions/hapticglove/out/Haptic_Ring": "Haptic (Ring)",
+      "/actions/hapticglove/out/Haptic_Pinky": "Haptic (Pinky)",
+      "/actions/hapticglove/in/Grip": "Grip"
     }
   ]
 }
