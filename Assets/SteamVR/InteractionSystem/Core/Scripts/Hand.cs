@@ -40,6 +40,7 @@ namespace Valve.VR.InteractionSystem
                                                               AttachmentFlags.TurnOnKinematic |
                                                               AttachmentFlags.SnapOnAttach;
 
+        //public Glove otherHand;
         public Hand otherHand;
         public SteamVR_Input_Sources handType;
 
