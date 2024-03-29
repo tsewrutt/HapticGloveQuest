@@ -328,12 +328,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   handType: 2
-  palmHapticPt: {fileID: 0}
-  thumbHapticPt: {fileID: 0}
-  indexHapticPt: {fileID: 0}
-  middleHapticPt: {fileID: 0}
-  ringHapticPt: {fileID: 0}
-  pinkyHapticPt: {fileID: 0}
   grabThresholdDistance: 0.1
   grabPinchAction:
     actionPath: /actions/default/in/GrabPinch
@@ -3854,7 +3848,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11401046, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11401046, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
       propertyPath: hoverSphereRadius
@@ -3877,8 +3871,38 @@ PrefabInstance:
         type: 3}
       insertIndex: 2
       addedObject: {fileID: 21337972}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 160596, guid: dc06161b6d97feb419f45f03b62e14b9,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 404910086}
   m_SourcePrefab: {fileID: 100100000, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
+--- !u!1 &404910085 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 160596, guid: dc06161b6d97feb419f45f03b62e14b9,
+    type: 3}
+  m_PrefabInstance: {fileID: 404910084}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &404910086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 404910085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f8ae2322c787fd4f8bdd3839960122d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 0
+  grabThresholdDistance: 0.1
+  grabPinchAction:
+    actionPath: /actions/default/in/GrabPinch
+    needsReinit: 0
+  hapticAction:
+    actionPath: /actions/default/out/Haptic
+    needsReinit: 0
 --- !u!1 &411575526
 GameObject:
   m_ObjectHideFlags: 0
