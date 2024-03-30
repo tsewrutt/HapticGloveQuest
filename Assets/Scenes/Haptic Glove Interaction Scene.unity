@@ -337,9 +337,6 @@ MonoBehaviour:
   hapticPalmAction:
     actionPath: /actions/default/out/Haptic
     needsReinit: 0
-  hapticThumbAction:
-    actionPath: /actions/hapticglove/out/Haptic_Thumb
-    needsReinit: 0
   hapticIndexAction:
     actionPath: /actions/hapticglove/out/Haptic_Index
     needsReinit: 0
@@ -3921,9 +3918,6 @@ MonoBehaviour:
     needsReinit: 0
   hapticPalmAction:
     actionPath: /actions/default/out/Haptic
-    needsReinit: 0
-  hapticThumbAction:
-    actionPath: /actions/hapticglove/out/Haptic_Thumb
     needsReinit: 0
   hapticIndexAction:
     actionPath: /actions/hapticglove/out/Haptic_Index
@@ -9670,7 +9664,7 @@ GameObject:
   - component: {fileID: 1223803337}
   - component: {fileID: 1223803336}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: ThrowableCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using System.Reflection;
+using System.Timers;
 using UnityEngine;
 using Valve.VR;
 using Valve.VR.InteractionSystem;
@@ -61,42 +62,27 @@ public class Glove : MonoBehaviour
     public enum TypeOfGloveInteraction
     {
         Idle, //This includes releasing an object
-        OneFingerPress,
-        TwoFingerPress,
-        ThreeFingerPress,
-        IndexAndThumbGrab,
-        MiddleAndThumbGrab,
-        RingAndThumbGrab,
-        PinkyAndThumbGrab,
+        IndexMiddleRingPress,
+        IndexMiddlePress,
+        IndexRingPress,
+        IndexPress,
+        ThumbAndIndexGrab,
+        ThumbAndMiddleGrab,
+        ThumbAndRingGrab,
+        ThumbAndPinkyGrab,
         AllFingersGrab, // If object is tagged "texture" we dont grab, we call TextureFeel()
         
         //Wood Haptics//
-        ThumbWoodHaptic,
-        IndexWoodHaptic,
-        MiddleWoodHaptic,
-        RingWoodHaptic,
-        PinkyWoodHaptic,
+        WoodHaptic,
 
         //Concrete Haptics//
-        ThumbConcreteHaptic,
-        IndexConcreteHaptic,
-        MiddleContreteHaptic,
-        RingContreteHaptic,
-        PinkConcreteHaptic,
+        ConcreteHaptic,
 
         //Plastic Haptics//
-        ThumbPlasticHaptic,
-        IndexPlasticHaptic,
-        MiddlePlasticHaptic,
-        RingPlasticHaptic,
-        PinkPlasticHaptic,
+        PlasticHaptic,
 
         //Sand Haptics//
-        ThumbSandHaptic,
-        IndexSandHaptic,
-        MiddleSandHaptic,
-        RingSandHaptic,
-        PinkSandHaptic,
+        SandHaptic,
 
     }
 
@@ -155,6 +141,10 @@ public class Glove : MonoBehaviour
 
     //This one will check the fingers are colliding with an object
     //and switch the states
+
+
+    //We may have huge latency
+    //Possible solution is to do check hand, if you no object associated with hand, then run inside updateglovestate
     void UpdateGloveState()
     {
         // Check if finger tips are touching the obj
@@ -471,44 +461,83 @@ public class Glove : MonoBehaviour
         // we can check if any of those fingers are colliding then proceed on grabbing
 
 
-        //if (!isThumbTouchingObject && !isIndexTouchingObject && !isRingTouchingObject && !isMiddleTouchingObject && !isRingTouchingObject && !isPinkyTouchingObject)
-        //{
-        //    gloveState = TypeOfGloveInteraction.Idle;
-        //}
-        //else if (isThumbTouchingObject && isIndexTouchingObject && isRingTouchingObject && isMiddleTouchingObject && isRingTouchingObject && isPinkyTouchingObject)
-        //{
-
-        //}
         // Set glove state based on the detected interaction for each finger
-        if (isThumbTouchingObject)
+
+
+        //===================== Press =================//
+        // Index Press
+        if ((isIndexTouchingObject && !isThumbTouchingObject))
         {
-            //gloveState = TypeOfGloveInteraction.OneFingerPress; //This would be checking all other finger to be off
-         
+            //Index + Middle Press
+            gloveState = TypeOfGloveInteraction.IndexPress;
+
         }
-        else if (isThumbTouchingWood)
+        else if ((isIndexTouchingObject && isMiddleTouchingObject))
         {
-            gloveState = TypeOfGloveInteraction.ThumbWoodHaptic;
+            //Index + Middle Press
+            gloveState = TypeOfGloveInteraction.IndexMiddlePress;
+
         }
-        else if (isThumbTouchingConcrete)
+        else if ((isIndexTouchingObject && isMiddleTouchingObject && isRingTouchingObject))
         {
-            gloveState = TypeOfGloveInteraction.ThumbConcreteHaptic;
+            //Index + Ring + Middle Press
+            gloveState = TypeOfGloveInteraction.IndexMiddleRingPress;
+
         }
-        else if (isThumbTouchingPlastic)
+        //===================== Grab =================//
+        else if ((isIndexTouchingObject && isThumbTouchingObject))
         {
-            gloveState = TypeOfGloveInteraction.ThumbPlasticHaptic;
+            //Index + Thumb = Grab
+            gloveState = TypeOfGloveInteraction.ThumbAndIndexGrab;
+
         }
-        else if (isThumbTouchingSand)
+        else if ((isThumbTouchingObject && isIndexTouchingObject && isMiddleTouchingObject && isRingTouchingObject && isPinkyTouchingObject))
         {
-            gloveState = TypeOfGloveInteraction.ThumbSandHaptic;
+            //All Fingers Grab
+            gloveState = TypeOfGloveInteraction.AllFingersGrab;
+
         }
-        else if (isIndexTouchingObject)
+        else if ((isThumbTouchingObject && isMiddleTouchingObject))
         {
-            gloveState = TypeOfGloveInteraction.OneFingerPress;
+            //Thumb + Middle Grab
+            gloveState = TypeOfGloveInteraction.ThumbAndMiddleGrab;
+
         }
-        // Repeat the same for other fingers...
-        else
+        else if ((isThumbTouchingObject && isRingTouchingObject))
         {
-            gloveState = TypeOfGloveInteraction.Idle;
+            //Thumb + Ring Grab
+            gloveState = TypeOfGloveInteraction.ThumbAndRingGrab;
+        }
+        else if ((isThumbTouchingObject && isRingTouchingObject))
+        {
+            //Thumb + Pinky Grab
+            gloveState = TypeOfGloveInteraction.ThumbAndPinkyGrab;
+
+        }
+        //================ Textures ==================//
+        else if (isThumbTouchingWood || isIndexTouchingWood || isMiddleTouchingWood || isRingTouchingWood || isPinkyTouchingWood)
+        {
+            //Wood Interaction
+            gloveState = TypeOfGloveInteraction.WoodHaptic;
+        
+        }
+        else if (isThumbTouchingConcrete || isIndexTouchingConcrete || isMiddleTouchingConcrete || isRingTouchingConcrete || isPinkyTouchingConcrete)
+        {
+            //Concrete Interaction
+            gloveState = TypeOfGloveInteraction.ConcreteHaptic;
+        
+        }
+        else if (isThumbTouchingPlastic || isIndexTouchingPlastic || isMiddleTouchingPlastic || isRingTouchingPlastic || isPinkyTouchingPlastic)
+        {
+            //Plastic Interaction
+            gloveState = TypeOfGloveInteraction.PlasticHaptic;
+        
+        }
+        else if (isThumbTouchingSand || isIndexTouchingSand || isMiddleTouchingSand || isRingTouchingSand || isPinkyTouchingSand)
+        {
+            //Sand Interaction
+            gloveState = TypeOfGloveInteraction.SandHaptic;
+        
         }
 
 
