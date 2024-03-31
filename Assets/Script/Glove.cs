@@ -499,6 +499,17 @@ public class Glove : MonoBehaviour
                 Debug.Log("Glove not interacting anymore");
                 ResetGloveState();
                 interactingObject = null;
+                //thumb_tip_haptics = { false, false, false, false, false };
+                //index_tip_haptics = { false, false, false, false, false };
+                //middle_tip_haptics = { false, false, false, false, false };
+                //ring_tip_haptics = { false, false, false, false, false };
+                //pinky_tip_haptics = { false, false, false, false, false };
+                activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0f);
+                activate_haptics(hapticIndexAction, SteamVR_Input_Sources.RightHand, index_tip_haptics, 0f);
+                activate_haptics(hapticMiddleAction, SteamVR_Input_Sources.RightHand, middle_tip_haptics, 0f);
+                activate_haptics(hapticRingAction, SteamVR_Input_Sources.RightHand, ring_tip_haptics, 0f);
+                activate_haptics(hapticPinkyAction, SteamVR_Input_Sources.RightHand, pinky_tip_haptics, 0f);
+
                 break;
         }
     }
