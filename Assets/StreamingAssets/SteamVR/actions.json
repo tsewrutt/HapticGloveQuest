@@ -54,6 +54,26 @@
       "type": "vibration"
     },
     {
+      "name": "/actions/default/out/Haptic_Thumb",
+      "type": "vibration"
+    },
+    {
+      "name": "/actions/default/out/Haptic_Index",
+      "type": "vibration"
+    },
+    {
+      "name": "/actions/default/out/Haptic_Middle",
+      "type": "vibration"
+    },
+    {
+      "name": "/actions/default/out/Haptic_Ring",
+      "type": "vibration"
+    },
+    {
+      "name": "/actions/default/out/Haptic_Pinky",
+      "type": "vibration"
+    },
+    {
       "name": "/actions/platformer/in/Move",
       "type": "vector2"
     },
@@ -235,7 +255,12 @@
       "/actions/hapticglove/out/Haptic_Middle": "Haptic (Middle)",
       "/actions/hapticglove/out/Haptic_Ring": "Haptic (Ring)",
       "/actions/hapticglove/out/Haptic_Pinky": "Haptic (Pinky)",
-      "/actions/hapticglove/in/Grip": "Grip"
+      "/actions/hapticglove/in/Grip": "Grip",
+      "/actions/default/out/Haptic_Thumb": "Haptic_Thumb",
+      "/actions/default/out/Haptic_Index": "Haptic_Index",
+      "/actions/default/out/Haptic_Middle": "Haptic_Middle",
+      "/actions/default/out/Haptic_Ring": "Haptic_Ring",
+      "/actions/default/out/Haptic_Pinky": "Haptic_Pinky"
     }
   ]
 }

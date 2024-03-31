@@ -16,9 +16,18 @@ public class Glove : MonoBehaviour
     public SteamVR_Input_Sources handType;
     public SteamVR_Behaviour_Skeleton skeleton;
 
+    //GameObjectGrabbed
+    private GameObject interactingObject;
+
     [Header("Tip Collision")]
     public GameObject tipColliderPrefab;
-    private GameObject[] tipColliders;
+    
+
+    private Vector3 thumbColliderPos;
+    private Vector3 indexColliderPos;
+    private Vector3 middleColliderPos;
+    private Vector3 ringColliderPos;
+    private Vector3 pinkyColliderPos;
 
     //Thumb Booleans//
     private bool isThumbTouchingObject = false;
@@ -55,16 +64,33 @@ public class Glove : MonoBehaviour
     private bool isPinkyTouchingPlastic = false;
     private bool isPinkyTouchingSand = false;
 
-    private GameObject interactingObject;
-
     public float grabThresholdDistance = 0.1f;
+
+    bool[] thumb_tip_haptics = { false, false, false, false, false };
+    bool[] index_tip_haptics = { false, false, false, false, false };
+    bool[] middle_tip_haptics = { false, false, false, false, false };
+    bool[] ring_tip_haptics = { false, false, false, false, false };
+    bool[] pinky_tip_haptics = { false, false, false, false, false };
+
+
+
+    private Transform[] thumbBones;
+    private Transform[] indexBones;
+    private Transform[] middleBones;
+    private Transform[] ringBones;
+    private Transform[] pinkyBones;
+
+    private Collider[] thumbColliders;
+    private Collider[] indexColliders;
+    private Collider[] middleColliders;
+    private Collider[] ringColliders;
+    private Collider[] pinkyColliders; 
 
     public enum TypeOfGloveInteraction
     {
         Idle, //This includes releasing an object
         IndexMiddleRingPress,
         IndexMiddlePress,
-        IndexRingPress,
         IndexPress,
         ThumbAndIndexGrab,
         ThumbAndMiddleGrab,
@@ -92,21 +118,30 @@ public class Glove : MonoBehaviour
     private SteamVR_Behaviour_Pose trackedObject;
     public SteamVR_Action_Boolean grabPinchAction = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("GrabPinch");
     public SteamVR_Action_Vibration hapticPalmAction = SteamVR_Input.GetAction<SteamVR_Action_Vibration>("Haptic");
-    //public SteamVR_Action_Vibration hapticThumbAction = SteamVR_Input.GetAction<SteamVR_Action_Vibration>("Haptic_Thumb");
+    public SteamVR_Action_Vibration hapticThumbAction = SteamVR_Input.GetAction<SteamVR_Action_Vibration>("Haptic_Thumb");
     public SteamVR_Action_Vibration hapticIndexAction = SteamVR_Input.GetAction<SteamVR_Action_Vibration>("Haptic_Index");
     public SteamVR_Action_Vibration hapticMiddleAction = SteamVR_Input.GetAction<SteamVR_Action_Vibration>("Haptic_Middle");
     public SteamVR_Action_Vibration hapticRingAction = SteamVR_Input.GetAction<SteamVR_Action_Vibration>("Haptic_Ring");
     public SteamVR_Action_Vibration hapticPinkyAction = SteamVR_Input.GetAction<SteamVR_Action_Vibration>("Haptic_Pinky");
-    
+
+    private GameObject handColliderRightObject;
 
     void Start()
     {
+        handColliderRightObject = GameObject.Find("HandColliderRight(Clone)");
 
-        tipColliders = new GameObject[5];
-
-        for (int i = 0; i < 5; i++)
+        // Check if the object is found
+        if (handColliderRightObject != null)
         {
-            tipColliders[i] = Instantiate(tipColliderPrefab, transform);
+            // Do something with the found object
+            Debug.Log("Found HandColliderRight(Clone) object!");
+
+            //GetHandCollider Component
+        }
+        else
+        {
+            // Object not found
+            Debug.LogWarning("HandRight(Clone) object not found!");
         }
 
         gloveState = TypeOfGloveInteraction.Idle;
@@ -119,40 +154,396 @@ public class Glove : MonoBehaviour
         //Get Tip Position And Update the colliders to match where tip is going
         if (skeleton != null)
         {
-            Vector3 thumbTipPosition = skeleton.GetBonePosition(3);
-            tipColliders[0].transform.position = thumbTipPosition;
             
-            Vector3 indexTipPosition = skeleton.GetBonePosition(7);
-            tipColliders[1].transform.position = indexTipPosition;
+            // Check if the object is found
+            if (handColliderRightObject != null)
+            {
+                //GetHandCollider Component
+                HandCollider handCollider = handColliderRightObject.GetComponent<HandCollider>();
+                if (handCollider != null)
+                {
+                    //Do all transform
+                    // Access the collider transforms from the HandCollider script
+                    thumbBones = handCollider.fingerColliders.thumbColliders;
+                    indexBones = handCollider.fingerColliders.indexColliders;
+                    middleBones = handCollider.fingerColliders.middleColliders;
+                    ringBones = handCollider.fingerColliders.ringColliders;
+                    pinkyBones = handCollider.fingerColliders.pinkyColliders;
 
-            Vector3 middleTipPosition = skeleton.GetBonePosition(11);
-            tipColliders[2].transform.position = middleTipPosition;
+                    thumbColliderPos = thumbBones[0].position;
+                    indexColliderPos = indexBones[0].position;
+                    middleColliderPos = middleBones[0].position;
+                    ringColliderPos = ringBones[0].position;
+                    pinkyColliderPos = pinkyBones[0].position;
 
-            Vector3 ringTipPosition = skeleton.GetBonePosition(15);
-            tipColliders[3].transform.position = ringTipPosition;
+                }
+                else
+                {
+                    Debug.Log("HandCollider Component not found");
+                }
+            }
+            else
+            {
+                // Object not found
+                Debug.LogWarning("HandRight(Clone) object not found!");
+            }
 
-            Vector3 pinkyTipPosition = skeleton.GetBonePosition(19);
-            tipColliders[4].transform.position = pinkyTipPosition;
 
         }
-        
+
         UpdateGloveState();
+        DoGloveAction();
+    }
+
+    void DoGloveAction()
+    {
+        switch(gloveState)
+        {
+            case TypeOfGloveInteraction.IndexPress:
+                Debug.Log("Do Index Press Action");
+                index_tip_haptics[0] = true;
+                index_tip_haptics[1] = true;
+                index_tip_haptics[2] = true;
+                index_tip_haptics[3] = true;
+                index_tip_haptics[4] = true;
+                activate_haptics(hapticIndexAction, SteamVR_Input_Sources.RightHand, index_tip_haptics,1f);
+
+                break;
+
+            case TypeOfGloveInteraction.IndexMiddlePress:
+                Debug.Log("Do Index & Middle Press Action");
+                index_tip_haptics[0] = true;
+                index_tip_haptics[1] = true;
+                index_tip_haptics[2] = true;
+                index_tip_haptics[3] = true;
+                index_tip_haptics[4] = true;
+
+                middle_tip_haptics[0] = true;
+                middle_tip_haptics[1] = true;
+                middle_tip_haptics[2] = true;
+                middle_tip_haptics[3] = true;
+                middle_tip_haptics[4] = true;
+                activate_haptics(hapticIndexAction, SteamVR_Input_Sources.RightHand, index_tip_haptics, 0.0f);
+                activate_haptics(hapticMiddleAction, SteamVR_Input_Sources.RightHand, middle_tip_haptics, 0.0f);
+
+                break;
+
+            case TypeOfGloveInteraction.IndexMiddleRingPress:
+                Debug.Log("Do Index & Middle & Ring Press Action");
+                index_tip_haptics[0] = true;
+                index_tip_haptics[1] = true;
+                index_tip_haptics[2] = true;
+                index_tip_haptics[3] = true;
+                index_tip_haptics[4] = true;
+
+                middle_tip_haptics[0] = true;
+                middle_tip_haptics[1] = true;
+                middle_tip_haptics[2] = true;
+                middle_tip_haptics[3] = true;
+                middle_tip_haptics[4] = true;
+
+                ring_tip_haptics[0] = true;
+                ring_tip_haptics[1] = true;
+                ring_tip_haptics[2] = true;
+                ring_tip_haptics[3] = true;
+                ring_tip_haptics[4] = true;
+
+                activate_haptics(hapticIndexAction, SteamVR_Input_Sources.RightHand, index_tip_haptics, 0.0f);
+                activate_haptics(hapticMiddleAction, SteamVR_Input_Sources.RightHand, middle_tip_haptics, 0.0f);
+                activate_haptics(hapticRingAction, SteamVR_Input_Sources.RightHand, ring_tip_haptics, 0.0f);
+                break;
+
+            case TypeOfGloveInteraction.ThumbAndIndexGrab:
+                Debug.Log("Thumb and Index Grab");
+                activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0.25f);
+                activate_haptics(hapticIndexAction, SteamVR_Input_Sources.RightHand, index_tip_haptics, 0.25f);
+                //Grabbing 
+
+                Vector3 midpt = (thumbColliders[0].transform.position + indexColliders[0].transform.position) /2f;
+                Vector3 direction = indexColliders[0].transform.position - thumbColliders[0].transform.position;
+
+                //Quaternion rotation = Quaternion.LookRotation(direction);
+                //interactingObject.transform.position = midpt;
+                //interactingObject.transform.rotation = rotation;
+
+                break;
+
+            case TypeOfGloveInteraction.ThumbAndMiddleGrab:
+                Debug.Log("Thumb and Middle Grab");
+                activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0.25f);
+                activate_haptics(hapticMiddleAction, SteamVR_Input_Sources.RightHand, middle_tip_haptics, 0.25f);
+
+                break;
+            
+            case TypeOfGloveInteraction.ThumbAndRingGrab:
+                Debug.Log("Thumb and Pinky Grab");
+                activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0.25f);
+                activate_haptics(hapticRingAction, SteamVR_Input_Sources.RightHand, ring_tip_haptics, 0.25f);
+
+                break;
+
+            case TypeOfGloveInteraction.ThumbAndPinkyGrab:
+                Debug.Log("Thumb and Pinky Grab");
+                activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0.25f);
+                activate_haptics(hapticPinkyAction, SteamVR_Input_Sources.RightHand, pinky_tip_haptics, 0.25f);
+
+                break;
+
+            case TypeOfGloveInteraction.WoodHaptic:
+                Debug.Log("Wood Feel Haptic");
+                
+                if (isThumbTouchingWood)
+                {
+                    thumb_tip_haptics[0] = false;
+                    thumb_tip_haptics[1] = true;
+                    thumb_tip_haptics[2] = false;
+                    thumb_tip_haptics[3] = true;
+                    thumb_tip_haptics[4] = false;
+                    activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0.05f);
+                   
+                }
+                if (isIndexTouchingWood)
+                {
+                    index_tip_haptics[0] = false;
+                    index_tip_haptics[1] = true;
+                    index_tip_haptics[2] = false;
+                    index_tip_haptics[3] = true;
+                    index_tip_haptics[4] = false;
+                    activate_haptics(hapticIndexAction, SteamVR_Input_Sources.RightHand, index_tip_haptics, 0.05f);
+
+                }
+                if (isMiddleTouchingWood)
+                {
+                    middle_tip_haptics[0] = false;
+                    middle_tip_haptics[1] = true;
+                    middle_tip_haptics[2] = false;
+                    middle_tip_haptics[3] = true;
+                    middle_tip_haptics[4] = false;
+                    activate_haptics(hapticMiddleAction, SteamVR_Input_Sources.RightHand, middle_tip_haptics, 0.05f);
+                }
+                if (isRingTouchingWood)
+                {
+                    ring_tip_haptics[0] = false;
+                    ring_tip_haptics[1] = true;
+                    ring_tip_haptics[2] = false;
+                    ring_tip_haptics[3] = true;
+                    ring_tip_haptics[4] = false;
+                    activate_haptics(hapticRingAction, SteamVR_Input_Sources.RightHand, ring_tip_haptics, 0.05f);
+                }
+                if (isPinkyTouchingWood)
+                {
+                    pinky_tip_haptics[0] = false;
+                    pinky_tip_haptics[1] = true;
+                    pinky_tip_haptics[2] = false;
+                    pinky_tip_haptics[3] = true;
+                    pinky_tip_haptics[4] = false;
+                    activate_haptics(hapticRingAction, SteamVR_Input_Sources.RightHand, pinky_tip_haptics, 0.05f);
+                }
+                break;
+
+            case TypeOfGloveInteraction.ConcreteHaptic:
+                Debug.Log("Concrete Feel Haptic");
+                if (isThumbTouchingConcrete)
+                {
+                    thumb_tip_haptics[0] = true;
+                    thumb_tip_haptics[1] = true;
+                    thumb_tip_haptics[2] = true;
+                    thumb_tip_haptics[3] = true;
+                    thumb_tip_haptics[4] = true;
+                    activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0.08f);
+
+                }
+                if (isIndexTouchingConcrete)
+                {
+                    index_tip_haptics[0] = true;
+                    index_tip_haptics[1] = true;
+                    index_tip_haptics[2] = true;
+                    index_tip_haptics[3] = true;
+                    index_tip_haptics[4] = true;
+                    activate_haptics(hapticIndexAction, SteamVR_Input_Sources.RightHand, index_tip_haptics, 0.08f);
+
+                }
+                if (isMiddleTouchingConcrete)
+                {
+                    middle_tip_haptics[0] = true;
+                    middle_tip_haptics[1] = true;
+                    middle_tip_haptics[2] = true;
+                    middle_tip_haptics[3] = true;
+                    middle_tip_haptics[4] = true;
+                    activate_haptics(hapticMiddleAction, SteamVR_Input_Sources.RightHand, middle_tip_haptics, 0.08f);
+                }
+                if (isRingTouchingConcrete)
+                {
+                    ring_tip_haptics[0] = true;
+                    ring_tip_haptics[1] = true;
+                    ring_tip_haptics[2] = true;
+                    ring_tip_haptics[3] = true;
+                    ring_tip_haptics[4] = true;
+                    activate_haptics(hapticRingAction, SteamVR_Input_Sources.RightHand, ring_tip_haptics, 0.08f);
+                }
+                if (isPinkyTouchingConcrete)
+                {
+                    pinky_tip_haptics[0] = true;
+                    pinky_tip_haptics[1] = true;
+                    pinky_tip_haptics[2] = true;
+                    pinky_tip_haptics[3] = true;
+                    pinky_tip_haptics[4] = true;
+                    activate_haptics(hapticRingAction, SteamVR_Input_Sources.RightHand, pinky_tip_haptics, 0.08f);
+                }
+                break;
+
+            case TypeOfGloveInteraction.PlasticHaptic:
+                Debug.Log("Plastic Feel Haptic");
+                if (isThumbTouchingPlastic)
+                {
+                    thumb_tip_haptics[0] = true;
+                    thumb_tip_haptics[1] = true;
+                    thumb_tip_haptics[2] = false;
+                    thumb_tip_haptics[3] = false;
+                    thumb_tip_haptics[4] = true;
+                    activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0.03f);
+
+                }
+                if (isIndexTouchingPlastic)
+                {
+                    index_tip_haptics[0] = true;
+                    index_tip_haptics[1] = true;
+                    index_tip_haptics[2] = false;
+                    index_tip_haptics[3] = false;
+                    index_tip_haptics[4] = true;
+                    activate_haptics(hapticIndexAction, SteamVR_Input_Sources.RightHand, index_tip_haptics, 0.03f);
+
+                }
+                if (isMiddleTouchingPlastic)
+                {
+                    middle_tip_haptics[0] = true;
+                    middle_tip_haptics[1] = true;
+                    middle_tip_haptics[2] = false;
+                    middle_tip_haptics[3] = false;
+                    middle_tip_haptics[4] = true;
+                    activate_haptics(hapticMiddleAction, SteamVR_Input_Sources.RightHand, middle_tip_haptics, 0.03f);
+                }
+                if (isRingTouchingPlastic)
+                {
+                    ring_tip_haptics[0] = true;
+                    ring_tip_haptics[1] = true;
+                    ring_tip_haptics[2] = false;
+                    ring_tip_haptics[3] = false;
+                    ring_tip_haptics[4] = true;
+                    activate_haptics(hapticRingAction, SteamVR_Input_Sources.RightHand, ring_tip_haptics, 0.03f);
+                }
+                if (isPinkyTouchingPlastic)
+                {
+                    pinky_tip_haptics[0] = true;
+                    pinky_tip_haptics[1] = true;
+                    pinky_tip_haptics[2] = false;
+                    pinky_tip_haptics[3] = false;
+                    pinky_tip_haptics[4] = true;
+                    activate_haptics(hapticRingAction, SteamVR_Input_Sources.RightHand, pinky_tip_haptics, 0.03f);
+                }
+                break;
+
+            case TypeOfGloveInteraction.SandHaptic:
+                Debug.Log("Sand Feel Haptic");
+                if (isThumbTouchingSand)
+                {
+                    thumb_tip_haptics[0] = false;
+                    thumb_tip_haptics[1] = true;
+                    thumb_tip_haptics[2] = true;
+                    thumb_tip_haptics[3] = true;
+                    thumb_tip_haptics[4] = false;
+                    activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0.1f);
+
+                }
+                if (isIndexTouchingSand)
+                {
+                    index_tip_haptics[0] = false;
+                    index_tip_haptics[1] = true;
+                    index_tip_haptics[2] = true;
+                    index_tip_haptics[3] = true;
+                    index_tip_haptics[4] = false;
+                    activate_haptics(hapticIndexAction, SteamVR_Input_Sources.RightHand, index_tip_haptics, 0.1f);
+
+                }
+                if (isMiddleTouchingSand)
+                {
+                    middle_tip_haptics[0] = false;
+                    middle_tip_haptics[1] = true;
+                    middle_tip_haptics[2] = true;
+                    middle_tip_haptics[3] = true;
+                    middle_tip_haptics[4] = false;
+                    activate_haptics(hapticMiddleAction, SteamVR_Input_Sources.RightHand, middle_tip_haptics, 0.1f);
+                }
+                if (isRingTouchingSand)
+                {
+                    ring_tip_haptics[0] = false;
+                    ring_tip_haptics[1] = true;
+                    ring_tip_haptics[2] = true;
+                    ring_tip_haptics[3] = true;
+                    ring_tip_haptics[4] = false;
+                    activate_haptics(hapticRingAction, SteamVR_Input_Sources.RightHand, ring_tip_haptics, 0.1f);
+                }
+                if (isPinkyTouchingSand)
+                {
+                    pinky_tip_haptics[0] = false;
+                    pinky_tip_haptics[1] = true;
+                    pinky_tip_haptics[2] = true;
+                    pinky_tip_haptics[3] = true;
+                    pinky_tip_haptics[4] = false;
+                    activate_haptics(hapticRingAction, SteamVR_Input_Sources.RightHand, pinky_tip_haptics, 0.1f);
+                }
+                break;
+
+
+            case TypeOfGloveInteraction.Idle:
+                Debug.Log("Glove not interacting anymore");
+                ResetGloveState();
+                interactingObject = null;
+                break;
+        }
     }
 
     //This one will check the fingers are colliding with an object
     //and switch the states
 
+        //ThumbAndIndexGrab,
+        //ThumbAndMiddleGrab,
+        //ThumbAndRingGrab,
+        //ThumbAndPinkyGrab,
+        //AllFingersGrab, // If object is tagged "texture" we dont grab, we call TextureFeel()
+        
+        ////Wood Haptics//
+        //WoodHaptic,
 
+        ////Concrete Haptics//
+        //ConcreteHaptic,
+
+        ////Plastic Haptics//
+        //PlasticHaptic,
+
+        ////Sand Haptics//
+        //SandHaptic,
     //We may have huge latency
     //Possible solution is to do check hand, if you no object associated with hand, then run inside updateglovestate
+
+    void ResetGloveState() {
+
+        ResetThumbBooleans();
+        ResetIndexBooleans();
+        ResetMiddleBooleans();
+        ResetRingBooleans();
+        ResetPinkyBooleans();
+    
+    }
+
     void UpdateGloveState()
     {
         // Check if finger tips are touching the obj
-        Collider[] thumbColliders = Physics.OverlapSphere(tipColliders[0].transform.position, 0.05f);
-        Collider[] indexColliders = Physics.OverlapSphere(tipColliders[1].transform.position, 0.05f);
-        Collider[] middleColliders = Physics.OverlapSphere(tipColliders[2].transform.position, 0.05f);
-        Collider[] ringColliders = Physics.OverlapSphere(tipColliders[3].transform.position, 0.05f);
-        Collider[] pinkyColliders = Physics.OverlapSphere(tipColliders[4].transform.position, 0.05f);
+        thumbColliders = Physics.OverlapSphere(thumbColliderPos, 0.03f);
+        indexColliders = Physics.OverlapSphere(indexColliderPos, 0.03f);
+        middleColliders = Physics.OverlapSphere(middleColliderPos, 0.03f);
+        ringColliders = Physics.OverlapSphere(ringColliderPos, 0.03f);
+        pinkyColliders = Physics.OverlapSphere(pinkyColliderPos, 0.03f);
 
         //Check Collider on Thumb
         foreach (Collider collider in thumbColliders)
@@ -208,6 +599,11 @@ public class Glove : MonoBehaviour
                 isThumbTouchingConcrete = false;
                 isThumbTouchingPlastic = false;
                 break;
+            }
+            else
+            {
+                ResetThumbBooleans();
+                
             }
 
         }
@@ -269,6 +665,10 @@ public class Glove : MonoBehaviour
                 isIndexTouchingPlastic = false;
                 break;
             }
+            else
+            {
+                ResetIndexBooleans();
+            }
 
         }
 
@@ -283,6 +683,8 @@ public class Glove : MonoBehaviour
                 isMiddleTouchingConcrete = false;
                 isMiddleTouchingPlastic = false;
                 isMiddleTouchingSand = false;
+
+                interactingObject = collider.gameObject;
 
                 break;
             }
@@ -329,6 +731,11 @@ public class Glove : MonoBehaviour
                 isMiddleTouchingWood = false;
                 isMiddleTouchingConcrete = false;
                 isMiddleTouchingPlastic = false;
+                break;
+            }
+            else
+            {
+                ResetMiddleBooleans();
                 break;
             }
 
@@ -392,6 +799,10 @@ public class Glove : MonoBehaviour
                 isRingTouchingPlastic = false;
                 break;
             }
+            else
+            {
+                ResetRingBooleans();
+            }
 
         }
 
@@ -451,6 +862,10 @@ public class Glove : MonoBehaviour
                 isPinkyTouchingConcrete = false;
                 isPinkyTouchingPlastic = false;
                 break;
+            }
+            else
+            {
+                ResetPinkyBooleans();
             }
 
         }
@@ -537,14 +952,29 @@ public class Glove : MonoBehaviour
         {
             //Sand Interaction
             gloveState = TypeOfGloveInteraction.SandHaptic;
-        
+
+        }
+        else
+        {
+            gloveState = TypeOfGloveInteraction.Idle;
         }
 
 
     }
 
-    //Thumb Resets//
-    void ResetThumbBooleans()
+
+//    void ResetColliders()
+//    {
+//        thumbColliders ;
+//        pindexColliders;
+//        middleColliders;
+//        ringColliders;
+//        pinkyColliders;
+
+
+//}
+//Thumb Resets//
+void ResetThumbBooleans()
     {
         isThumbTouchingObject = false;
         isThumbTouchingWood = false;
@@ -695,6 +1125,33 @@ public class Glove : MonoBehaviour
     void ResetPinkyTouchingSand()
     {
         isPinkyTouchingSand = false;
+    }
+
+    public bool activate_haptics(SteamVR_Action_Vibration finger, SteamVR_Input_Sources hand, bool[] finger_tips, float tension_steps)
+    {
+        if (tension_steps < 0f || tension_steps > 1f || finger_tips.Length != 5)
+            return false;
+
+        int temp = 0;
+
+        for (int i = 0; i < 5; i++)
+            if (finger_tips[i])
+                temp |= 1 << i;
+
+        if (tension_steps > 1)
+            tension_steps /= 240f;
+
+        finger.Execute(0, 0, temp, tension_steps, hand);
+
+
+        //Changes all hapts to false for different texture
+
+        for(int i = 0; i < 5; i++)
+        {
+            finger_tips[i] = false; 
+        }
+
+        return true;
     }
 
 

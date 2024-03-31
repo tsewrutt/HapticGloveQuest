@@ -112,5 +112,45 @@ namespace Valve.VR
                 return SteamVR_Actions.default_Haptic;
             }
         }
+        
+        public virtual SteamVR_Action_Vibration Haptic_Thumb
+        {
+            get
+            {
+                return SteamVR_Actions.default_Haptic_Thumb;
+            }
+        }
+        
+        public virtual SteamVR_Action_Vibration Haptic_Index
+        {
+            get
+            {
+                return SteamVR_Actions.default_Haptic_Index;
+            }
+        }
+        
+        public virtual SteamVR_Action_Vibration Haptic_Middle
+        {
+            get
+            {
+                return SteamVR_Actions.default_Haptic_Middle;
+            }
+        }
+        
+        public virtual SteamVR_Action_Vibration Haptic_Ring
+        {
+            get
+            {
+                return SteamVR_Actions.default_Haptic_Ring;
+            }
+        }
+        
+        public virtual SteamVR_Action_Vibration Haptic_Pinky
+        {
+            get
+            {
+                return SteamVR_Actions.default_Haptic_Pinky;
+            }
+        }
     }
 }

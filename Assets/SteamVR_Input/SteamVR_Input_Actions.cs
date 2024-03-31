@@ -41,6 +41,16 @@ namespace Valve.VR
         
         private static SteamVR_Action_Vibration p_default_Haptic;
         
+        private static SteamVR_Action_Vibration p_default_Haptic_Thumb;
+        
+        private static SteamVR_Action_Vibration p_default_Haptic_Index;
+        
+        private static SteamVR_Action_Vibration p_default_Haptic_Middle;
+        
+        private static SteamVR_Action_Vibration p_default_Haptic_Ring;
+        
+        private static SteamVR_Action_Vibration p_default_Haptic_Pinky;
+        
         private static SteamVR_Action_Vector2 p_platformer_Move;
         
         private static SteamVR_Action_Boolean p_platformer_Jump;
@@ -172,6 +182,46 @@ namespace Valve.VR
             get
             {
                 return SteamVR_Actions.p_default_Haptic.GetCopy<SteamVR_Action_Vibration>();
+            }
+        }
+        
+        public static SteamVR_Action_Vibration default_Haptic_Thumb
+        {
+            get
+            {
+                return SteamVR_Actions.p_default_Haptic_Thumb.GetCopy<SteamVR_Action_Vibration>();
+            }
+        }
+        
+        public static SteamVR_Action_Vibration default_Haptic_Index
+        {
+            get
+            {
+                return SteamVR_Actions.p_default_Haptic_Index.GetCopy<SteamVR_Action_Vibration>();
+            }
+        }
+        
+        public static SteamVR_Action_Vibration default_Haptic_Middle
+        {
+            get
+            {
+                return SteamVR_Actions.p_default_Haptic_Middle.GetCopy<SteamVR_Action_Vibration>();
+            }
+        }
+        
+        public static SteamVR_Action_Vibration default_Haptic_Ring
+        {
+            get
+            {
+                return SteamVR_Actions.p_default_Haptic_Ring.GetCopy<SteamVR_Action_Vibration>();
+            }
+        }
+        
+        public static SteamVR_Action_Vibration default_Haptic_Pinky
+        {
+            get
+            {
+                return SteamVR_Actions.p_default_Haptic_Pinky.GetCopy<SteamVR_Action_Vibration>();
             }
         }
         
@@ -342,6 +392,11 @@ namespace Valve.VR
                     SteamVR_Actions.default_SnapTurnLeft,
                     SteamVR_Actions.default_SnapTurnRight,
                     SteamVR_Actions.default_Haptic,
+                    SteamVR_Actions.default_Haptic_Thumb,
+                    SteamVR_Actions.default_Haptic_Index,
+                    SteamVR_Actions.default_Haptic_Middle,
+                    SteamVR_Actions.default_Haptic_Ring,
+                    SteamVR_Actions.default_Haptic_Pinky,
                     SteamVR_Actions.platformer_Move,
                     SteamVR_Actions.platformer_Jump,
                     SteamVR_Actions.buggy_Steering,
@@ -388,6 +443,11 @@ namespace Valve.VR
                     SteamVR_Actions.hapticglove_Grip};
             Valve.VR.SteamVR_Input.actionsOut = new Valve.VR.ISteamVR_Action_Out[] {
                     SteamVR_Actions.default_Haptic,
+                    SteamVR_Actions.default_Haptic_Thumb,
+                    SteamVR_Actions.default_Haptic_Index,
+                    SteamVR_Actions.default_Haptic_Middle,
+                    SteamVR_Actions.default_Haptic_Ring,
+                    SteamVR_Actions.default_Haptic_Pinky,
                     SteamVR_Actions.hapticglove_Haptic,
                     SteamVR_Actions.hapticglove_Haptic_Thumb,
                     SteamVR_Actions.hapticglove_Haptic_Index,
@@ -396,6 +456,11 @@ namespace Valve.VR
                     SteamVR_Actions.hapticglove_Haptic_Pinky};
             Valve.VR.SteamVR_Input.actionsVibration = new Valve.VR.SteamVR_Action_Vibration[] {
                     SteamVR_Actions.default_Haptic,
+                    SteamVR_Actions.default_Haptic_Thumb,
+                    SteamVR_Actions.default_Haptic_Index,
+                    SteamVR_Actions.default_Haptic_Middle,
+                    SteamVR_Actions.default_Haptic_Ring,
+                    SteamVR_Actions.default_Haptic_Pinky,
                     SteamVR_Actions.hapticglove_Haptic,
                     SteamVR_Actions.hapticglove_Haptic_Thumb,
                     SteamVR_Actions.hapticglove_Haptic_Index,
@@ -466,6 +531,11 @@ namespace Valve.VR
             SteamVR_Actions.p_default_SnapTurnLeft = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/SnapTurnLeft")));
             SteamVR_Actions.p_default_SnapTurnRight = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/SnapTurnRight")));
             SteamVR_Actions.p_default_Haptic = ((SteamVR_Action_Vibration)(SteamVR_Action.Create<SteamVR_Action_Vibration>("/actions/default/out/Haptic")));
+            SteamVR_Actions.p_default_Haptic_Thumb = ((SteamVR_Action_Vibration)(SteamVR_Action.Create<SteamVR_Action_Vibration>("/actions/default/out/Haptic_Thumb")));
+            SteamVR_Actions.p_default_Haptic_Index = ((SteamVR_Action_Vibration)(SteamVR_Action.Create<SteamVR_Action_Vibration>("/actions/default/out/Haptic_Index")));
+            SteamVR_Actions.p_default_Haptic_Middle = ((SteamVR_Action_Vibration)(SteamVR_Action.Create<SteamVR_Action_Vibration>("/actions/default/out/Haptic_Middle")));
+            SteamVR_Actions.p_default_Haptic_Ring = ((SteamVR_Action_Vibration)(SteamVR_Action.Create<SteamVR_Action_Vibration>("/actions/default/out/Haptic_Ring")));
+            SteamVR_Actions.p_default_Haptic_Pinky = ((SteamVR_Action_Vibration)(SteamVR_Action.Create<SteamVR_Action_Vibration>("/actions/default/out/Haptic_Pinky")));
             SteamVR_Actions.p_platformer_Move = ((SteamVR_Action_Vector2)(SteamVR_Action.Create<SteamVR_Action_Vector2>("/actions/platformer/in/Move")));
             SteamVR_Actions.p_platformer_Jump = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/platformer/in/Jump")));
             SteamVR_Actions.p_buggy_Steering = ((SteamVR_Action_Vector2)(SteamVR_Action.Create<SteamVR_Action_Vector2>("/actions/buggy/in/Steering")));
