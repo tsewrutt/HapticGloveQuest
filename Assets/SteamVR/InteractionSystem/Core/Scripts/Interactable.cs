@@ -304,10 +304,10 @@ namespace Valve.VR.InteractionSystem
                 onAttachedToHand.Invoke(hand);
             }
 
-            if (skeletonPoser != null && hand.skeleton != null)
-            {
-                hand.skeleton.BlendToPoser(skeletonPoser, blendToPoseTime);
-            }
+            //if (skeletonPoser != null && hand.skeleton != null)
+            //{
+            //    hand.skeleton.BlendToPoser(skeletonPoser, blendToPoseTime);
+            //}
 
             attachedToHand = hand;
         }
@@ -330,11 +330,11 @@ namespace Valve.VR.InteractionSystem
             }
 
 
-            if (skeletonPoser != null)
-            {
-                if (hand.skeleton != null)
-                    hand.skeleton.BlendToSkeleton(releasePoseBlendTime);
-            }
+            //if (skeletonPoser != null)
+            //{
+            //    if (hand.skeleton != null)
+            //        hand.skeleton.BlendToSkeleton(releasePoseBlendTime);
+            //}
 
             attachedToHand = null;
         }

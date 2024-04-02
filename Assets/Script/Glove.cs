@@ -330,7 +330,7 @@ public class Glove : MonoBehaviour
                     {
                         //Then Attach new object
                         Debug.Log("Before attach");
-                        hand.AttachObject(interactingObject, GrabTypes.Scripted, Hand.AttachmentFlags.ParentToHand);
+                        //hand.AttachObject(interactingObject, GrabTypes.Scripted, Hand.AttachmentFlags.ParentToHand);
                         Debug.Log("Between attach");
                         previousObj = interactingObject;
                         Debug.Log("After attach");
@@ -590,10 +590,10 @@ public class Glove : MonoBehaviour
 
 
             case TypeOfGloveInteraction.Idle:
-                Debug.Log("Glove not interacting anymore");
+                // Debug.Log("Glove not interacting anymore");
                 ResetGloveState();
                 //SetInteractableToNull();
-                //if(interactable != null)
+                //if(interactable != null) 
                 //{
                 //    interactable.SendMessage("OnDetachedFromHand", SendMessageOptions.DontRequireReceiver);
                 //}
@@ -1008,40 +1008,40 @@ public class Glove : MonoBehaviour
 
         }
         //===================== Grab =================//
-        else if ((isIndexTouchingObject && isThumbTouchingObject))
-        {
+        //else if ((isIndexTouchingObject && isThumbTouchingObject))
+        //{
 
 
-            gloveState = TypeOfGloveInteraction.ThumbAndIndexGrab;
+        //    gloveState = TypeOfGloveInteraction.ThumbAndIndexGrab;
 
-        }
-        else if ((isThumbTouchingObject && isIndexTouchingObject && isMiddleTouchingObject && isRingTouchingObject && isPinkyTouchingObject))
-        {
-            //All Fingers Grab
-            gloveState = TypeOfGloveInteraction.AllFingersGrab;
+        //}
+        //else if ((isThumbTouchingObject && isIndexTouchingObject && isMiddleTouchingObject && isRingTouchingObject && isPinkyTouchingObject))
+        //{
+        //    //All Fingers Grab
+        //    gloveState = TypeOfGloveInteraction.AllFingersGrab;
 
-        }
-        else if ((isThumbTouchingObject && isMiddleTouchingObject))
-        {
-            //Thumb + Middle Grab
-            gloveState = TypeOfGloveInteraction.ThumbAndMiddleGrab;
+        //}
+        //else if ((isThumbTouchingObject && isMiddleTouchingObject))
+        //{
+        //    //Thumb + Middle Grab
+        //    gloveState = TypeOfGloveInteraction.ThumbAndMiddleGrab;
 
-        }
-        else if ((isThumbTouchingObject && isRingTouchingObject))
-        {
-            //Thumb + Ring Grab
-            gloveState = TypeOfGloveInteraction.ThumbAndRingGrab;
-        }
-        else if ((isThumbTouchingObject && isRingTouchingObject))
-        {
-            //Thumb + Pinky Grab
-            gloveState = TypeOfGloveInteraction.ThumbAndPinkyGrab;
+        //}
+        //else if ((isThumbTouchingObject && isRingTouchingObject))
+        //{
+        //    //Thumb + Ring Grab
+        //    gloveState = TypeOfGloveInteraction.ThumbAndRingGrab;
+        //}
+        //else if ((isThumbTouchingObject && isRingTouchingObject))
+        //{
+        //    //Thumb + Pinky Grab
+        //    gloveState = TypeOfGloveInteraction.ThumbAndPinkyGrab;
 
-            //All fingers touching!
-        }else if(isThumbTouchingObject && isIndexTouchingObject && isMiddleTouchingObject && isRingTouchingObject && isPinkyTouchingObject)
-        {
-            gloveState = TypeOfGloveInteraction.AllFingersGrab;
-        }
+        //    //All fingers touching!
+        //}else if(isThumbTouchingObject && isIndexTouchingObject && isMiddleTouchingObject && isRingTouchingObject && isPinkyTouchingObject)
+        //{
+        //    gloveState = TypeOfGloveInteraction.AllFingersGrab;
+        //}
         //================ Textures ==================//
         else if (isThumbTouchingWood || isIndexTouchingWood || isMiddleTouchingWood || isRingTouchingWood || isPinkyTouchingWood)
         {
