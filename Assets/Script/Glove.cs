@@ -283,28 +283,28 @@ public class Glove : MonoBehaviour
 
             case TypeOfGloveInteraction.ThumbAndIndexGrab:
                 Debug.Log("Thumb and Index Grab");
-                activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0.25f);
-                activate_haptics(hapticIndexAction, SteamVR_Input_Sources.RightHand, index_tip_haptics, 0.25f);
+                //activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0.25f);
+                //activate_haptics(hapticIndexAction, SteamVR_Input_Sources.RightHand, index_tip_haptics, 0.25f);
 
                 ////Grabbing
-                
 
-                float distanceBetweenFingers = Vector3.Distance(thumbColliders[0].transform.position, indexColliders[0].transform.position);
 
-                Debug.Log("Distance btw fingers:" + distanceBetweenFingers);
-                //We can use this to track gap between fingers,if gap is big aagain, then release
-                //Index + Thumb = Grab
-                co1 = null;
-                co2 = null;
-                foreach (Collider collider in thumbColliders)
-                {
-                    if (collider.CompareTag("InteractingObject"))
-                    {
-                        co1  = collider.GetComponent<Collider>();
-                        Debug.Log("get first collider" + co1);
-                        break;
-                    }
-                }
+                // float distanceBetweenFingers = Vector3.Distance(thumbColliders[0].transform.position, indexColliders[0].transform.position);
+
+                //Debug.Log("Distance btw fingers:" + distanceBetweenFingers);
+                ////We can use this to track gap between fingers,if gap is big aagain, then release
+                ////Index + Thumb = Grab
+                //co1 = null;
+                //co2 = null;
+                //foreach (Collider collider in thumbColliders)
+                //{
+                //    if (collider.CompareTag("InteractingObject"))
+                //    {
+                //        co1  = collider.GetComponent<Collider>();
+                //        Debug.Log("get first collider" + co1);
+                //        break;
+                //    }
+                //}
 
                 foreach (Collider collider in indexColliders)
                 {
@@ -315,42 +315,35 @@ public class Glove : MonoBehaviour
                         break;
                     }
                 }
-                Debug.Log("Going in Setting interacting obj");
-                if ((co1 == co2) && (co1 !=null) && (co2 != null) && distanceBetweenFingers < 0.06)
+                //Debug.Log("Going in Setting interacting obj");
+                //if ((co1 == co2) && (co1 !=null) && (co2 != null) && (distanceBetweenFingers < 0.08))
+                //{
+                //    interactingObject = co1.gameObject;
+                //    SetInteractable(interactingObject);
+                //    Debug.Log("setting interacting obj to collider objs");
+                //}
+                if (interactable == null && co2 != null)
                 {
-                    interactingObject = co1.gameObject;
-                    Debug.Log("setting interacting obj to collider objs");
+                    interactingObject = co2.gameObject;
+                    SetInteractable(interactingObject);
                 }
-                Debug.Log("Outside interacting object");
+
                 //MAX DEFAULT DISTANCE = 0.10f
-                if (distanceBetweenFingers < 0.06)
+                if (interactable != null)
                 {
-                    
-                    if(previousObj != interactingObject)
+                    interactable.attachedToHand = hand;
+                    if (interactable.attachedToHand != null)
                     {
-                        //Then Attach new object
-                        Debug.Log("Before attach");
-                        //hand.AttachObject(interactingObject, GrabTypes.Scripted, Hand.AttachmentFlags.ParentToHand);
-                        Debug.Log("Between attach");
-                        previousObj = interactingObject;
-                        Debug.Log("After attach");
+                        Debug.Log("Attached to hand");
+                        activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0.25f);
+                        activate_haptics(hapticIndexAction, SteamVR_Input_Sources.RightHand, index_tip_haptics, 0.25f);
                     }
                     else
                     {
-                        Debug.Log("Dont attach oject, obj already attach");
-                        //dont do attach since already attached
-                        previousObj = interactingObject;
+                        activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0f);
+                        activate_haptics(hapticIndexAction, SteamVR_Input_Sources.RightHand, index_tip_haptics, 0f);
+                        Debug.Log("Not pinching to grab");
                     }
-                   // gloveState = TypeOfGloveInteraction.ThumbAndIndexGrab;
-
-                }
-                else
-                {
-                    //release object
-                    Debug.Log("Detaching!");
-                    hand.DetachObject(previousObj);
-                    Debug.Log("finger distance bigger than initial gap then release!");
-                    gloveState = TypeOfGloveInteraction.Idle;
                 }
 
 
@@ -1008,13 +1001,13 @@ public class Glove : MonoBehaviour
 
         }
         //===================== Grab =================//
-        //else if ((isIndexTouchingObject && isThumbTouchingObject))
-        //{
+        else if ((isIndexTouchingObject && isThumbTouchingObject))
+        {
 
 
-        //    gloveState = TypeOfGloveInteraction.ThumbAndIndexGrab;
+            gloveState = TypeOfGloveInteraction.ThumbAndIndexGrab;
 
-        //}
+        }
         //else if ((isThumbTouchingObject && isIndexTouchingObject && isMiddleTouchingObject && isRingTouchingObject && isPinkyTouchingObject))
         //{
         //    //All Fingers Grab
@@ -1038,7 +1031,8 @@ public class Glove : MonoBehaviour
         //    gloveState = TypeOfGloveInteraction.ThumbAndPinkyGrab;
 
         //    //All fingers touching!
-        //}else if(isThumbTouchingObject && isIndexTouchingObject && isMiddleTouchingObject && isRingTouchingObject && isPinkyTouchingObject)
+        //}
+        //else if (isThumbTouchingObject && isIndexTouchingObject && isMiddleTouchingObject && isRingTouchingObject && isPinkyTouchingObject)
         //{
         //    gloveState = TypeOfGloveInteraction.AllFingersGrab;
         //}

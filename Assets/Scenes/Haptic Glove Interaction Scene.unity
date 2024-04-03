@@ -3814,7 +3814,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 447954, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.46
       objectReference: {fileID: 0}
     - target: {fileID: 447954, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3870,7 +3870,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11401046, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
       propertyPath: hoverSphereRadius
-      value: 0.05
+      value: 0.075
       objectReference: {fileID: 0}
     - target: {fileID: 114000010591715100, guid: dc06161b6d97feb419f45f03b62e14b9,
         type: 3}
@@ -9674,6 +9674,7 @@ GameObject:
   - component: {fileID: 1223803336}
   - component: {fileID: 1223803341}
   - component: {fileID: 1223803340}
+  - component: {fileID: 1223803342}
   m_Layer: 0
   m_Name: ThrowableCube
   m_TagString: InteractingObject
@@ -9691,7 +9692,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.16699979, y: 1.076, z: -0.48799998}
-  m_LocalScale: {x: 0.09, y: 0.09, z: 0.09}
+  m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1333603246}
@@ -9808,12 +9809,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activateActionSetOnAttach:
     actionSetPath: 
-  hideHandOnAttach: 1
+  hideHandOnAttach: 0
   hideSkeletonOnAttach: 0
   hideControllerOnAttach: 0
   handAnimationOnPickup: 0
   setRangeOfMotionOnPickup: -1
-  useHandObjectAttachmentPoint: 1
+  useHandObjectAttachmentPoint: 0
   attachEaseIn: 0
   snapAttachEaseInCurve:
     serializedVersion: 2
@@ -9842,7 +9843,7 @@ MonoBehaviour:
   snapAttachEaseInTime: 0.15
   snapAttachEaseInCompleted: 0
   skeletonPoser: {fileID: 0}
-  handFollowTransform: 1
+  handFollowTransform: 0
   highlightOnHover: 1
   hideHighlight: []
   hoverPriority: 0
@@ -9875,6 +9876,60 @@ MonoBehaviour:
   previewPoseSelection: 0
   blendingBehaviours: []
   scale: 1
+--- !u!114 &1223803342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1223803334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffefbea063cab884ca33e5a449e5c22c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attachmentFlags: 44
+  attachmentOffset: {fileID: 0}
+  catchingSpeedThreshold: -1
+  releaseVelocityStyle: 1
+  releaseVelocityTimeOffset: -0.011
+  scaleReleaseVelocity: 1.1
+  scaleReleaseVelocityThreshold: -1
+  scaleReleaseVelocityCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  restoreOriginalParent: 0
+  onPickUp:
+    m_PersistentCalls:
+      m_Calls: []
+  onDetachFromHand:
+    m_PersistentCalls:
+      m_Calls: []
+  onHeldUpdate:
+    m_PersistentCalls:
+      m_Calls: []
+  interactable: {fileID: 0}
 --- !u!1 &1224984514
 GameObject:
   m_ObjectHideFlags: 0
@@ -19178,7 +19233,7 @@ PrefabInstance:
     - target: {fileID: 7576513306828354084, guid: fbdbc18161becdf40b6e54ce248a5a17,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.598
+      value: 5.025
       objectReference: {fileID: 0}
     - target: {fileID: 7576513306828354084, guid: fbdbc18161becdf40b6e54ce248a5a17,
         type: 3}
