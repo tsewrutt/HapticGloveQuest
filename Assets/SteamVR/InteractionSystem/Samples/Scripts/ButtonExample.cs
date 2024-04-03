@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using UnityEngine.UI;
 namespace Valve.VR.InteractionSystem.Sample
 {
     public class ButtonExample : MonoBehaviour
@@ -9,9 +9,19 @@ namespace Valve.VR.InteractionSystem.Sample
 
         public GameObject prefab;
 
+        private GameObject[] ballArray;
+        private int maxObj = 5;
+        private int oldIndex = 0;
+
+        public Text pressText;
+        private int pressInt = 0;
+
+        private MeshRenderer meshRenderer;
         private void Start()
         {
             hoverButton.onButtonDown.AddListener(OnButtonDown);
+            ballArray = new GameObject[maxObj];
+            pressText.text = "Button Pressed:\n" + pressInt + " times";
         }
 
         private void OnButtonDown(Hand hand)
@@ -23,17 +33,25 @@ namespace Valve.VR.InteractionSystem.Sample
         {
             GameObject planting = GameObject.Instantiate<GameObject>(prefab);
             planting.transform.position = this.transform.position;
-            planting.transform.rotation = Quaternion.Euler(0, Random.value * 360f, 0);
+            //planting.transform.rotation = Quaternion.Euler(0, Random.value * 360f, 0);
+            
+            UpdateText();
 
-            planting.GetComponentInChildren<MeshRenderer>().material.SetColor("_TintColor", Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f));
+
+            meshRenderer = planting.GetComponent<MeshRenderer>();
+            Material mat = meshRenderer.materials[Random.Range(0, 3)];
+            meshRenderer.material = mat;
+            Debug.Log(mat + " " + meshRenderer.materials.Length);
+
+
+            ballArray[oldIndex] = planting;
+
+            //increment the oldest index, wrap around once reached max
+            oldIndex = (oldIndex + 1) % maxObj;
 
             Rigidbody rigidbody = planting.GetComponent<Rigidbody>();
             if (rigidbody != null)
                 rigidbody.isKinematic = true;
-
-
-            Vector3 initialScale = Vector3.one * 0.01f;
-            Vector3 targetScale = Vector3.one * (1 + (Random.value * 0.25f));
 
             float startTime = Time.time;
             float overTime = 0.5f;
@@ -41,13 +59,19 @@ namespace Valve.VR.InteractionSystem.Sample
 
             while (Time.time < endTime)
             {
-                planting.transform.localScale = Vector3.Slerp(initialScale, targetScale, (Time.time - startTime) / overTime);
+                //planting.transform.localScale = Vector3.Slerp(initialScale, targetScale, (Time.time - startTime) / overTime);
                 yield return null;
             }
 
 
             if (rigidbody != null)
                 rigidbody.isKinematic = false;
+        }
+
+        private void UpdateText()
+        {
+            pressInt++;
+            pressText.text = "Button Pressed:\n" + pressInt + " times";
         }
     }
 }

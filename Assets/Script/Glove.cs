@@ -283,28 +283,10 @@ public class Glove : MonoBehaviour
 
             case TypeOfGloveInteraction.ThumbAndIndexGrab:
                 Debug.Log("Thumb and Index Grab");
-                //activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0.25f);
-                //activate_haptics(hapticIndexAction, SteamVR_Input_Sources.RightHand, index_tip_haptics, 0.25f);
-
                 ////Grabbing
 
 
                 // float distanceBetweenFingers = Vector3.Distance(thumbColliders[0].transform.position, indexColliders[0].transform.position);
-
-                //Debug.Log("Distance btw fingers:" + distanceBetweenFingers);
-                ////We can use this to track gap between fingers,if gap is big aagain, then release
-                ////Index + Thumb = Grab
-                //co1 = null;
-                //co2 = null;
-                //foreach (Collider collider in thumbColliders)
-                //{
-                //    if (collider.CompareTag("InteractingObject"))
-                //    {
-                //        co1  = collider.GetComponent<Collider>();
-                //        Debug.Log("get first collider" + co1);
-                //        break;
-                //    }
-                //}
 
                 foreach (Collider collider in indexColliders)
                 {
@@ -315,13 +297,7 @@ public class Glove : MonoBehaviour
                         break;
                     }
                 }
-                //Debug.Log("Going in Setting interacting obj");
-                //if ((co1 == co2) && (co1 !=null) && (co2 != null) && (distanceBetweenFingers < 0.08))
-                //{
-                //    interactingObject = co1.gameObject;
-                //    SetInteractable(interactingObject);
-                //    Debug.Log("setting interacting obj to collider objs");
-                //}
+
                 if (interactable == null && co2 != null)
                 {
                     interactingObject = co2.gameObject;
@@ -352,22 +328,120 @@ public class Glove : MonoBehaviour
 
             case TypeOfGloveInteraction.ThumbAndMiddleGrab:
                 Debug.Log("Thumb and Middle Grab");
-                activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0.25f);
-                activate_haptics(hapticMiddleAction, SteamVR_Input_Sources.RightHand, middle_tip_haptics, 0.25f);
+
+                foreach (Collider collider in middleColliders)
+                {
+                    if (collider.CompareTag("InteractingObject"))
+                    {
+                        co2 = collider.GetComponent<Collider>();
+                        Debug.Log("get second collider:" + co2);
+                        break;
+                    }
+                }
+
+                if (interactable == null && co2 != null)
+                {
+                    interactingObject = co2.gameObject;
+                    SetInteractable(interactingObject);
+                }
+
+                //MAX DEFAULT DISTANCE = 0.10f
+                if (interactable != null)
+                {
+                    interactable.attachedToHand = hand;
+                    if (interactable.attachedToHand != null)
+                    {
+                        Debug.Log("Attached to hand");
+                        activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0.25f);
+                        activate_haptics(hapticMiddleAction, SteamVR_Input_Sources.RightHand, middle_tip_haptics, 0.25f);
+                    }
+                    else
+                    {
+                        activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0f);
+                        activate_haptics(hapticIndexAction, SteamVR_Input_Sources.RightHand, middle_tip_haptics, 0f);
+                        Debug.Log("Not pinching to grab");
+                    }
+                }
+
+
 
                 break;
             
             case TypeOfGloveInteraction.ThumbAndRingGrab:
-                Debug.Log("Thumb and Pinky Grab");
-                activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0.25f);
-                activate_haptics(hapticRingAction, SteamVR_Input_Sources.RightHand, ring_tip_haptics, 0.25f);
+                Debug.Log("Thumb and Ring Grab");
+
+                foreach (Collider collider in ringColliders)
+                {
+                    if (collider.CompareTag("InteractingObject"))
+                    {
+                        co2 = collider.GetComponent<Collider>();
+                        Debug.Log("get second collider:" + co2);
+                        break;
+                    }
+                }
+
+                if (interactable == null && co2 != null)
+                {
+                    interactingObject = co2.gameObject;
+                    SetInteractable(interactingObject);
+                }
+
+                //MAX DEFAULT DISTANCE = 0.10f
+                if (interactable != null)
+                {
+                    interactable.attachedToHand = hand;
+                    if (interactable.attachedToHand != null)
+                    {
+                        Debug.Log("Attached to hand");
+                        activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0.25f);
+                        activate_haptics(hapticRingAction, SteamVR_Input_Sources.RightHand, ring_tip_haptics, 0.25f);
+                    }
+                    else
+                    {
+                        activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0f);
+                        activate_haptics(hapticRingAction, SteamVR_Input_Sources.RightHand, ring_tip_haptics, 0f);
+                        Debug.Log("Not pinching to grab");
+                    }
+                }
 
                 break;
 
             case TypeOfGloveInteraction.ThumbAndPinkyGrab:
                 Debug.Log("Thumb and Pinky Grab");
-                activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0.25f);
-                activate_haptics(hapticPinkyAction, SteamVR_Input_Sources.RightHand, pinky_tip_haptics, 0.25f);
+                
+                foreach (Collider collider in pinkyColliders)
+                {
+                    if (collider.CompareTag("InteractingObject"))
+                    {
+                        co2 = collider.GetComponent<Collider>();
+                        Debug.Log("get second collider:" + co2);
+                        break;
+                    }
+                }
+
+                if (interactable == null && co2 != null)
+                {
+                    interactingObject = co2.gameObject;
+                    SetInteractable(interactingObject);
+                }
+
+                //MAX DEFAULT DISTANCE = 0.10f
+                if (interactable != null)
+                {
+                    interactable.attachedToHand = hand;
+                    if (interactable.attachedToHand != null)
+                    {
+                        Debug.Log("Attached to hand");
+                        activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0.25f);
+                        activate_haptics(hapticPinkyAction, SteamVR_Input_Sources.RightHand, pinky_tip_haptics, 0.25f);
+                    }
+                    else
+                    {
+                        activate_haptics(hapticThumbAction, SteamVR_Input_Sources.RightHand, thumb_tip_haptics, 0f);
+                        activate_haptics(hapticPinkyAction, SteamVR_Input_Sources.RightHand, pinky_tip_haptics, 0f);
+                        Debug.Log("Not pinching to grab");
+                    }
+                }
 
                 break;
 
@@ -1014,24 +1088,24 @@ public class Glove : MonoBehaviour
         //    gloveState = TypeOfGloveInteraction.AllFingersGrab;
 
         //}
-        //else if ((isThumbTouchingObject && isMiddleTouchingObject))
-        //{
-        //    //Thumb + Middle Grab
-        //    gloveState = TypeOfGloveInteraction.ThumbAndMiddleGrab;
+        else if ((isThumbTouchingObject && isMiddleTouchingObject && !isIndexTouchingObject))
+        {
+            //Thumb + Middle Grab
+            gloveState = TypeOfGloveInteraction.ThumbAndMiddleGrab;
 
-        //}
-        //else if ((isThumbTouchingObject && isRingTouchingObject))
-        //{
-        //    //Thumb + Ring Grab
-        //    gloveState = TypeOfGloveInteraction.ThumbAndRingGrab;
-        //}
-        //else if ((isThumbTouchingObject && isRingTouchingObject))
-        //{
-        //    //Thumb + Pinky Grab
-        //    gloveState = TypeOfGloveInteraction.ThumbAndPinkyGrab;
+        }
+        else if ((isThumbTouchingObject && isRingTouchingObject && !isIndexTouchingObject && !isMiddleTouchingObject))
+        {
+            //Thumb + Ring Grab
+            gloveState = TypeOfGloveInteraction.ThumbAndRingGrab;
+        }
+        else if ((isThumbTouchingObject && isPinkyTouchingObject && !isRingTouchingObject && !isIndexTouchingObject && !isMiddleTouchingObject))
+        {
+            //Thumb + Pinky Grab
+            gloveState = TypeOfGloveInteraction.ThumbAndPinkyGrab;
 
-        //    //All fingers touching!
-        //}
+            //All fingers touching!
+        }
         //else if (isThumbTouchingObject && isIndexTouchingObject && isMiddleTouchingObject && isRingTouchingObject && isPinkyTouchingObject)
         //{
         //    gloveState = TypeOfGloveInteraction.AllFingersGrab;
@@ -1065,23 +1139,11 @@ public class Glove : MonoBehaviour
         {
             gloveState = TypeOfGloveInteraction.Idle;
             
-            
         }
 
 
     }
 
-
-//    void ResetColliders()
-//    {
-//        thumbColliders ;
-//        pindexColliders;
-//        middleColliders;
-//        ringColliders;
-//        pinkyColliders;
-
-
-//}
 //Thumb Resets//
 void ResetThumbBooleans()
     {
